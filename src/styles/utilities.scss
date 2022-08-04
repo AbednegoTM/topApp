@@ -1,0 +1,119 @@
+@import '~bootstrap/scss/bootstrap.scss';
+
+
+
+
+.fs-sm {
+    font-size: 0.8rem;
+}
+
+.p-10 {
+    padding: 2.5rem !important;
+}
+
+.mw-25 {
+    max-width: 25%;
+}
+
+.mw-50 {
+    max-width: 50%;
+}
+
+.mw-75 {
+    max-width: 75%;
+}
+
+
+
+@include media-breakpoint-up(sm) {
+    .mw-sm-25 {
+        max-width: 25%;
+    }
+
+    .mw-sm-50 {
+        max-width: 50%;
+    }
+
+    .mw-sm-75 {
+        max-width: 75%;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .fm-md-w {
+        width: 16rem;
+    }
+
+    .mw-md-25 {
+        max-width: 25%;
+    }
+
+    .mw-md-50 {
+        max-width: 50%;
+    }
+
+    .mw-md-75 {
+        max-width: 75%;
+    }
+
+    .w-md-25 {
+        width: 25%;
+    }
+
+    .w-md-50 {
+        width: 50%;
+    }
+
+    .w-md-75 {
+        width: 75%;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .mw-lg-25 {
+        max-width: 25%;
+    }
+
+    .mw-lg-30 {
+        max-width: 30%;
+    }
+
+    .mw-lg-50 {
+        max-width: 50%;
+    }
+
+    .mw-lg-75 {
+        max-width: 75%;
+    }
+
+}
+
+@include media-breakpoint-up(xl) {
+    .mw-xl-25 {
+        max-width: 25%;
+    }
+
+    .mw-xl-50 {
+        max-width: 50%;
+    }
+
+    .mw-xl-75 {
+        max-width: 75%;
+    }
+
+}
+
+@include media-breakpoint-up(xxl) {
+    .mw-xxl-25 {
+        max-width: 25%;
+    }
+
+    .mw-xxl-50 {
+        max-width: 50%;
+    }
+
+    .mw-xxl-75 {
+        max-width: 75%;
+    }
+
+}
