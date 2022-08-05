@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReAuth } from "../baseQuery";
 import { baseUrl } from "../config";
 import { RootState } from "../store";
 
@@ -17,17 +18,9 @@ export interface LoginRequest {
   password: string;
 }
 
-export const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+export const authService = createApi({
+  reducerPath: "auth-service",
+  baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({
     login: builder.mutation<UserResponse, LoginRequest>({
       query: (credentials) => ({
@@ -46,4 +39,4 @@ export const api = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = api;
+export const { useLoginMutation, useRegisterMutation } = authService;

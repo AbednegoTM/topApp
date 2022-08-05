@@ -1,49 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useUsersQuery } from "../../app/services/users";
 import NavBar from "../../components/navigation/NavBar";
+import Pagination from "../../components/navigation/Pagination";
 import UserCard from "./UserCard";
 
 type Props = {};
 
 const UsersGrid = (props: Props) => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const { data: users, isSuccess, isLoading } = useUsersQuery(currentPage);
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
+
   return (
     <div className="">
       <NavBar />
-      <div className="row p-2">
-        {"123456".split("").map((dt) => (
-          <UserCard key={dt} />
-        ))}
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <nav aria-label="Page navigation">
-          <ul className="pagination">
-            <li className="page-item">
-              <a className="page-link" href="#">
-                Previous
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                1
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                2
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                3
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      {isLoading && <p>Loading...</p>}
+      {isSuccess && (
+        <div>
+          <div className="row p-2">
+            {users.data.map((dt: any) => (
+              <UserCard key={dt.id} />
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            numberOfPages={users.total_pages}
+            setCurrentPage={(page) => {
+              setCurrentPage(page);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

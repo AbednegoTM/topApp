@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import authReducer from "../pages/auth/authSlice";
-import { api } from "./services/auth";
+import { authService } from "./services/auth";
+import { usersService } from "./services/users";
 const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
+    [authService.reducerPath]: authService.reducer,
+    [usersService.reducerPath]: usersService.reducer,
     auth: authReducer,
   },
 });
