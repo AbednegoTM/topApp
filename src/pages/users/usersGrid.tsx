@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useUsersQuery } from "../../app/services/users";
+import { UserData, useUsersQuery } from "../../app/services/users";
 import NavBar from "../../components/navigation/NavBar";
 import Pagination from "../../components/navigation/Pagination";
 import UserCard from "./UserCard";
 
 type Props = {};
 
-const UsersGrid = (props: Props) => {
+const UsersGrid = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { data: users, isSuccess, isLoading } = useUsersQuery(currentPage);
 
@@ -21,8 +21,8 @@ const UsersGrid = (props: Props) => {
       {isSuccess && (
         <div>
           <div className="row p-2">
-            {users.data.map((dt: any) => (
-              <UserCard key={dt.id} />
+            {users.data.map((user: UserData) => (
+              <UserCard key={user.id} user={user} />
             ))}
           </div>
           <Pagination

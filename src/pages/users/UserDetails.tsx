@@ -1,30 +1,21 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetUserByIdQuery } from "../../app/services/users";
 import NavBar from "../../components/navigation/NavBar";
-import { loggedOut } from "../auth/authSlice";
-import "./account.css";
-import UserDetailsForm from "./UserDetailsForm";
+import UserDetailsForm from "../account/UserDetailsForm";
 
-const Account = () => {
-  const userId = localStorage.getItem("userId") || "1";
-  const { data: user, isSuccess } = useGetUserByIdQuery(userId);
-  let navigate = useNavigate();
-  const dispatch = useDispatch();
-  const logout = () => {
-    dispatch(loggedOut());
-    navigate("/auth");
-  };
+const Userdetails = () => {
+  const { id } = useParams();
+  const userId = id as string;
+  const { data: user, isLoading } = useGetUserByIdQuery(userId);
   return (
     <div>
       <div className="main-content">
         <NavBar />
-        <div className="container-fluid mt--7  ">
+        <div className="container-fluid mt--7">
           <div className="row">
             {/* profile card */}
             <div className="col-xl-4 order-xl-1 mb-5 mb-xl-0">
-              <div className="card shadow p-md-5 p-3 placeholder-glow">
+              <div className="card shadow p-md-5 p-3">
                 <div className="row justify-content-center">
                   <div className="col-lg-3 order-lg-2 d-flex flex-column">
                     <div className="card-profile-image">
@@ -40,32 +31,15 @@ const Account = () => {
                   <div className="text-center">
                     <h3 className="text-uppercase fs-5">{`${user?.data.first_name} ${user?.data.last_name}`}</h3>
                     <div className=" font-weight-300">{user?.data.email}</div>
-                    <div className="h5 mt-4">
-                      {user?.data.jobTitle || "Engineer"}
-                    </div>
-                    <div>
-                      <button
-                        className="btn btn-sm btn-primary"
-                        onClick={logout}
-                      >
-                        Logout
-                      </button>
-                    </div>
+                    <div className="h5 mt-4">Solution Manager</div>
                   </div>
                 </div>
               </div>
             </div>
-            {/* Account card */}
             <div className="col-xl-8 order-xl-2">
               <div className="card shadow p-md-5 py-3">
-                <div className="card-header bg-white border-0">
-                  <div className="row align-items-center">
-                    <div className="col-8">
-                      <h3 className="mb-0">My account</h3>
-                    </div>
-                  </div>
-                </div>
                 <div className="card-body">
+                  {/* form */}
                   {user && <UserDetailsForm user={user} id={userId} />}
                 </div>
               </div>
@@ -77,4 +51,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default Userdetails;

@@ -4,30 +4,29 @@ import type { User } from "../../app/services/auth";
 import type { RootState } from "../../app/store";
 
 type AuthState = {
-  user: User | null;
+  id: string | null;
   token: string | null;
 };
 
 const slice = createSlice({
   name: "auth",
-  initialState: { user: null, token: null } as AuthState,
+  initialState: { id: null, token: null } as AuthState,
   reducers: {
     setCredentials: (
       state,
-      { payload: { user, token } }: PayloadAction<{ user: User; token: string }>
+      { payload: { id, token } }: PayloadAction<{ id: string; token: string }>
     ) => {
-      state.user = user;
+      state.id = id;
       state.token = token;
     },
     loggedOut: () => {
       localStorage.clear();
-      return { user: null, token: null };
+      return { id: null, token: null };
     },
   },
 });
 
-export const { setCredentials,loggedOut } = slice.actions;
+export const { setCredentials, loggedOut } = slice.actions;
 
 export default slice.reducer;
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;

@@ -8,6 +8,7 @@ import "./auth.css";
 import { setCredentials } from "./authSlice";
 import { useForm, SubmitHandler } from "react-hook-form";
 import AuthLayout from "./AuthLayout";
+import { Interface } from "readline";
 
 type Props = {};
 
@@ -19,36 +20,33 @@ interface IFormInput {
   password: string;
 }
 
-const Login = (props: Props) => {
+interface IResponseErrorType {
+  status: number;
+  data: {
+    error: string;
+  };
+}
+
+const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
 
   let navigate = useNavigate();
   let location = useLocation() as LocationState;
 
   const onSubmit = async (data: IFormInput) => {
-    console.log({ data });
-    // const reqObj: LoginRequest = {
-    //   email: formData.get("email") as string,
-    //   password: formData.get("password") as string,
-    // };
+    let from = location.state?.from?.pathname || "/";
     try {
-      const res = await login(data).unwrap();
-      dispatch(
-        setCredentials({
-          ...res,
-          user: { first_name: "abed", last_name: "mwanza" },
-        })
-      );
+      const result = await login(data).unwrap();
+      dispatch(setCredentials(result));
       // Navigate to the right location or to the saved location
-      let from = location.state?.from?.pathname || "/";
-      localStorage.setItem("token", res.token);
+      localStorage.setItem("token", result.token);
       navigate(from, { replace: true });
     } catch (error) {
       console.log({ error });
@@ -100,6 +98,7 @@ const Login = (props: Props) => {
               type={showPassword ? "text" : "password"}
               className="form-control border-end-0"
               id="password"
+              placeholder="8+ characters"
             />
             <span
               className="input-group-text bg-white border-start-0"
@@ -115,17 +114,20 @@ const Login = (props: Props) => {
           {errors.password?.type === "pattern" && (
             <div className="text-danger">
               <p className="m-0 p-0"> Your password must be have at least:</p>
-              <ul>
-                <li> 8 characters long</li>
-                <li> 1 uppercase & 1 lowercase character</li>
-                <li> 1 number</li>
-              </ul>
+              <p>
+                8 characters long, 1 uppercase & 1 lowercase character, 1 number
+              </p>
             </div>
           )}
           {errors.password?.type === "required" && (
             <p className="text-danger"> Password is required</p>
           )}
         </div>
+        {error && (
+          <p className="text-danger">
+            {(error as IResponseErrorType).data.error}
+          </p>
+        )}
         <button type="submit" className="btn btn-primary rounded-5 my-3 px-3">
           Submit
         </button>

@@ -10,7 +10,7 @@ const NavBar = () => {
         <Link className="navbar-brand" to="/">
           Top App
         </Link>
-        {location.pathname !== "/auth" && (
+        { !/^\/auth/.test(location.pathname) && (
           <button
             className="navbar-toggler position-relative"
             type="button"
@@ -27,7 +27,7 @@ const NavBar = () => {
             </span>
           </button>
         )}
-        {location.pathname !== "/auth" && (
+        {!/^\/auth/.test(location.pathname) && (
           <div
             className={`collapse navbar-collapse ${toggle && "show"}`}
             id="navbarSupportedContent"
@@ -51,23 +51,13 @@ const NavBar = () => {
                 <Link
                   className="nav-link active"
                   aria-current="page"
-                  to="/users/1"
+                  to="/account"
                 >
                   My Account
                 </Link>
               </li>
             </ul>
-            {/* <form className="d-flex">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form> */}
+           
           </div>
         )}
       </div>

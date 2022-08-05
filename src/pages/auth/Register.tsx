@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../app/services/auth";
-import NavBar from "../../components/navigation/NavBar";
+import { useLoginMutation, useRegisterMutation } from "../../app/services/auth";
 import { setCredentials } from "./authSlice";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import AuthLayout from "./AuthLayout";
@@ -17,6 +16,13 @@ interface LocationState {
   state: { from: { pathname: string } };
 }
 
+interface IResponseErrorType {
+  status: number;
+  data: {
+    error: string;
+  };
+}
+
 const Register = () => {
   const {
     register,
@@ -24,24 +30,21 @@ const Register = () => {
     formState: { errors },
   } = useForm<IFormInput>();
   const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  const [addUser, { isLoading, error }] = useRegisterMutation();
   let navigate = useNavigate();
   let location = useLocation() as LocationState;
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onSubmit = async (data: IFormInput) => {
-    console.log({ data });
+    let from = location.state?.from?.pathname || "/";
     try {
-      const res = await login(data).unwrap();
-      dispatch(
-        setCredentials({
-          ...res,
-          user: { first_name: "abed", last_name: "mwanza" },
-        })
-      );
+      const result = await addUser(data).unwrap();
+      // res only returns token so we create fake user
+
+      dispatch(setCredentials(result));
       // Navigate to the right location or to the saved location
-      let from = location.state?.from?.pathname || "/";
-      localStorage.setItem("token", res.token);
+      localStorage.setItem("userId", result.id);
+      localStorage.setItem("token", result.token);
       navigate(from, { replace: true });
     } catch (error) {
       console.log({ error });
@@ -93,6 +96,7 @@ const Register = () => {
               type={showPassword ? "text" : "password"}
               className="form-control border-end-0"
               id="password"
+              placeholder="8+ characters"
             />
             <span
               className="input-group-text bg-white border-start-0"
@@ -108,17 +112,20 @@ const Register = () => {
           {errors.password?.type === "pattern" && (
             <div className="text-danger">
               <p className="m-0 p-0"> Your password must be have at least:</p>
-              <ul>
-                <li> 8 characters long</li>
-                <li> 1 uppercase & 1 lowercase character</li>
-                <li> 1 number</li>
-              </ul>
+              <p>
+                8 characters long, 1 uppercase & 1 lowercase character, 1 number
+              </p>
             </div>
           )}
           {errors.password?.type === "required" && (
             <p className="text-danger"> Password is required</p>
           )}
         </div>
+        {error && (
+          <p className="text-danger">
+            {(error as IResponseErrorType).data.error}
+          </p>
+        )}
         <button type="submit" className="btn btn-primary rounded-5 my-3 px-3">
           Submit
         </button>

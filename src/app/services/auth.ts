@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReAuth } from "../baseQuery";
+import { baseQueryWithReauth } from "../baseQuery";
 import { baseUrl } from "../config";
 import { RootState } from "../store";
 
@@ -9,7 +9,7 @@ export interface User {
 }
 
 export interface UserResponse {
-  user: User;
+  id: string;
   token: string;
 }
 
@@ -20,7 +20,7 @@ export interface LoginRequest {
 
 export const authService = createApi({
   reducerPath: "auth-service",
-  baseQuery: baseQueryWithReAuth,
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     login: builder.mutation<UserResponse, LoginRequest>({
       query: (credentials) => ({

@@ -7,6 +7,7 @@ import Auth from "./pages/auth/Auth";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/home/Home";
+import Userdetails from "./pages/users/UserDetails";
 import UsersGrid from "./pages/users/usersGrid";
 
 function App() {
@@ -36,6 +37,14 @@ function App() {
         />
         <Route
           path="/users/:id"
+          element={
+            <Protected>
+              <Userdetails />
+            </Protected>
+          }
+        />
+        <Route
+          path="/account"
           element={
             <Protected>
               <Account />

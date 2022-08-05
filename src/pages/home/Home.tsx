@@ -19,8 +19,8 @@ const Home = () => {
     <div>
       <NavBar />
       <div className="container">
-        <h1>Welcome back, Abednego</h1>
-        <h2>Your Location : {currentLocation}</h2>
+        <h1>Welcome</h1>
+        <h2>You are currently in : {currentLocation}</h2>
       </div>
     </div>
   );

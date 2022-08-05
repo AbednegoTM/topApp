@@ -1,29 +1,34 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReAuth } from "../baseQuery";
-import { baseUrl } from "../config";
-import { RootState } from "../store";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "../baseQuery";
 
-export interface User {
+export interface Users {
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+  data: UserData[];
+}
+export interface SingleUser {
+  data: UserData;
+}
+export interface UserData {
+  id: number;
+  email: string;
   first_name: string;
   last_name: string;
-}
-
-export interface UserResponse {
-  user: User;
-  token: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
+  avatar: string;
+  jobTitle?: string;
 }
 
 export const usersService = createApi({
   reducerPath: "users-service",
-  baseQuery: baseQueryWithReAuth,
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    users: builder.query({
+    users: builder.query<Users, number>({
       query: (page) => `users?page=${page}`,
+    }),
+    getUserById: builder.query<SingleUser, string>({
+      query: (id) => `users/${id}`,
     }),
     addUser: builder.mutation({
       query: (user) => ({
@@ -49,6 +54,7 @@ export const usersService = createApi({
 });
 
 export const {
+  useGetUserByIdQuery,
   useAddUserMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
