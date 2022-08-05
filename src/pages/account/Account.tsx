@@ -1,13 +1,16 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useGetUserByIdQuery } from "../../app/services/users";
+import { RootState } from "../../app/store";
 import NavBar from "../../components/navigation/NavBar";
 import { loggedOut } from "../auth/authSlice";
+import { UserState } from "../users/userSlice";
 import "./account.css";
 import UserDetailsForm from "./UserDetailsForm";
 
 const Account = () => {
+  const {jobTitle} = useSelector((state: RootState)=>state.userData);
   const userId = localStorage.getItem("userId") || "1";
   const { data: user, isSuccess } = useGetUserByIdQuery(userId);
   let navigate = useNavigate();
@@ -41,11 +44,11 @@ const Account = () => {
                     <h3 className="text-uppercase fs-5">{`${user?.data.first_name} ${user?.data.last_name}`}</h3>
                     <div className=" font-weight-300">{user?.data.email}</div>
                     <div className="h5 mt-4">
-                      {user?.data.jobTitle || "Engineer"}
+                      {user?.data.jobTitle || jobTitle as string}
                     </div>
                     <div>
                       <button
-                        className="btn btn-sm btn-primary"
+                        className="btn btn-primary rounded-5 my-3 px-3"
                         onClick={logout}
                       >
                         Logout

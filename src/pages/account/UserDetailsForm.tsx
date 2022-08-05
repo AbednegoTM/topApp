@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SingleUser, useUpdateUserMutation } from "../../app/services/users";
+import { useAppDispatch } from "../../app/store";
+import { setUser } from "../users/userSlice";
 import "./account.css";
 interface IAccountFormInput {
   username: string;
@@ -24,6 +26,7 @@ const UserDetailsForm = ({ user, id }: Props) => {
     reset,
     formState: { errors },
   } = useForm<IAccountFormInput>();
+  const dispatch = useAppDispatch();
 
   const toggleDisabled = () => setDisabled(!disabled);
 
@@ -33,7 +36,7 @@ const UserDetailsForm = ({ user, id }: Props) => {
       username: `${user?.data.first_name}.${user?.data.last_name}`,
       firstName: user?.data.first_name,
       lastName: user?.data.last_name,
-      jobTitle: user?.data.jobTitle || "Engineer",
+      jobTitle: user?.data.jobTitle || "Developer",
     });
   }, [reset, user?.data]);
 
@@ -41,12 +44,13 @@ const UserDetailsForm = ({ user, id }: Props) => {
     if (result) {
       setDisabled(true);
     }
-    console.log({ result });
   }, [result]);
 
   const onSubmit = async (data: IAccountFormInput) => {
-    update({ ...data, id: id });
-    //TODO: update redux slice with new data
+    const res = await update({ ...data, id: id }).unwrap();
+    console.log({res});
+
+    dispatch(setUser(res));
   };
   return (
     <div>
@@ -156,16 +160,22 @@ const UserDetailsForm = ({ user, id }: Props) => {
         {/* Address */}
         <div className="col-4 text-right">
           {disabled ? (
-            <button className="btn btn-primary" onClick={toggleDisabled}>
+            <button
+              className="btn rounded-5 btn-primary"
+              onClick={toggleDisabled}
+            >
               Edit details
             </button>
           ) : (
             <div className="d-flex flex-row">
-              <button type="submit" className="btn btn-success">
+              <button
+                type="submit"
+                className="btn rounded-5 my-3 px-3 btn-success"
+              >
                 Submit
               </button>
               <button
-                className="btn btn-info text-white mx-1"
+                className="btn btn-info  rounded-5 my-3 px-3 text-white mx-1"
                 onClick={toggleDisabled}
               >
                 Cancel
