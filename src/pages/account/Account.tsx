@@ -10,9 +10,9 @@ import "./account.css";
 import UserDetailsForm from "./UserDetailsForm";
 
 const Account = () => {
-  const {jobTitle} = useSelector((state: RootState)=>state.userData);
+  const { jobTitle } = useSelector((state: RootState) => state.userData);
   const userId = localStorage.getItem("userId") || "1";
-  const { data: user, isSuccess } = useGetUserByIdQuery(userId);
+  const { data: user, isSuccess, refetch } = useGetUserByIdQuery(userId);
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const logout = () => {
@@ -44,7 +44,7 @@ const Account = () => {
                     <h3 className="text-uppercase fs-5">{`${user?.data.first_name} ${user?.data.last_name}`}</h3>
                     <div className=" font-weight-300">{user?.data.email}</div>
                     <div className="h5 mt-4">
-                      {user?.data.jobTitle || jobTitle as string}
+                      {user?.data.jobTitle || (jobTitle as string)}
                     </div>
                     <div>
                       <button

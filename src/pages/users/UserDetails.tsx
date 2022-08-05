@@ -31,7 +31,6 @@ const Userdetails = () => {
                   <div className="text-center">
                     <h3 className="text-uppercase fs-5">{`${user?.data.first_name} ${user?.data.last_name}`}</h3>
                     <div className=" font-weight-300">{user?.data.email}</div>
-                    <div className="h5 mt-4">Solution Manager</div>
                   </div>
                 </div>
               </div>
